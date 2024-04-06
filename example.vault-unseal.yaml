@@ -1,0 +1,14 @@
+---
+checkInterval: 15s
+
+vault_nodes:
+  - https://1.2.3.4:8200
+  - https://1.2.3.5:8200
+  - https://1.2.3.6:8200
+
+unseal_tokens:
+  - token1
+  - token2
+  - token3
+  - token4
+  - token5
