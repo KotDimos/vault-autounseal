@@ -1,4 +1,4 @@
-module github.com/kotdimos/vault-autounseal-k8s
+module github.com/kotdimos/vault-autounseal
 
 go 1.21
 
