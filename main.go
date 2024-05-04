@@ -19,6 +19,7 @@ type UnsealConfig struct {
 	Nodes         []string      `yaml:"nodes"`
 	Tokens        []string      `yaml:"tokens"`
 	CheckInterval time.Duration `yaml:"checkInterval"`
+	TlsSkipVerify bool          `yaml:"tlsSkipVerify"`
 }
 
 func checkVaultReady(client *vault.Client) bool {
@@ -38,20 +39,17 @@ func getVaultSealStatus(client *vault.Client) bool {
 	return status.Sealed
 }
 
-func newVaultClient(addr string) (vaultClient *vault.Client) {
+func newVaultClient(addr string, tlsSkipVerify bool) (vaultClient *vault.Client) {
 	var err error
 	vaultConfig := vault.DefaultConfig()
 	vaultConfig.Address = addr
-	// vaultConfig.MaxRetries = 0
-	// vaultConfig.Timeout = defaultTimeout
 
-	// if err = vaultConfig.ConfigureTLS(&vapi.TLSConfig{Insecure: conf.TLSSkipVerify}); err != nil {
-	// 	logger.WithError(err).Fatal("error initializing tls config")
-	// }
+	if err = vaultConfig.ConfigureTLS(&vault.TLSConfig{Insecure: tlsSkipVerify}); err != nil {
+		fmt.Errorf("error initializing tls config")
+	}
 
 	if vaultClient, err = vault.NewClient(vaultConfig); err != nil {
 		fmt.Errorf("error creating vault client: %v", err)
-		//logger.Fatalf("error creating vault client: %v", err)
 	}
 
 	return vaultClient
@@ -72,7 +70,7 @@ func main() {
 
 	for {
 		for _, node := range unsealConfig.Nodes {
-			client := newVaultClient(node)
+			client := newVaultClient(node, unsealConfig.TlsSkipVerify)
 
 			if !checkVaultReady(client) {
 				fmt.Printf("Node %s is not ready\n", node)

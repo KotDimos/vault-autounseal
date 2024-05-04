@@ -1,6 +1,8 @@
 ---
 checkInterval: 15s
 
+tlsSkipVerify: false
+
 nodes:
   - https://1.2.3.4:8200
   - https://1.2.3.5:8200
