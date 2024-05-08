@@ -1,5 +1,5 @@
 ---
-checkInterval: 15s
+checkInterval: 15
 
 tlsSkipVerify: false
 
