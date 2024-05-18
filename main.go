@@ -2,8 +2,9 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"io/ioutil"
+	"log"
+	"os"
 	"time"
 
 	vault "github.com/hashicorp/vault/api"
@@ -13,6 +14,10 @@ import (
 // CLI arguments
 var (
 	configPath = flag.String("config", "./vault-unseal.yaml", "The path to the configuration file")
+)
+
+var (
+	l = log.New(os.Stdout, "", log.Ldate|log.Ltime)
 )
 
 type UnsealConfig struct {
@@ -33,7 +38,7 @@ func checkVaultReady(client *vault.Client) bool {
 func getVaultSealStatus(client *vault.Client) bool {
 	status, err := client.Sys().SealStatus()
 	if err != nil {
-		fmt.Errorf("checking seal status: %w", err)
+		l.Fatalf("checking seal status: %w", err)
 	}
 
 	return status.Sealed
@@ -45,11 +50,11 @@ func newVaultClient(addr string, tlsSkipVerify bool) (vaultClient *vault.Client)
 	vaultConfig.Address = addr
 
 	if err = vaultConfig.ConfigureTLS(&vault.TLSConfig{Insecure: tlsSkipVerify}); err != nil {
-		fmt.Errorf("error initializing tls config")
+		l.Fatalf("error initializing tls config")
 	}
 
 	if vaultClient, err = vault.NewClient(vaultConfig); err != nil {
-		fmt.Errorf("error creating vault client: %v", err)
+		l.Fatalf("error creating vault client: %v", err)
 	}
 
 	return vaultClient
@@ -73,17 +78,17 @@ func main() {
 			client := newVaultClient(node, unsealConfig.TlsSkipVerify)
 
 			if !checkVaultReady(client) {
-				fmt.Printf("Node %s is not ready\n", node)
+				l.Printf("Node %s is not ready\n", node)
 				continue
 			}
 
 			if getVaultSealStatus(client) {
-				fmt.Println("Vault is seal, start unseal")
+				l.Println("Vault is seal, start unseal")
 				for _, token := range unsealConfig.Tokens {
 					client.Sys().Unseal(token)
 				}
 			} else {
-				fmt.Println("Vault is unseal")
+				l.Println("Vault is unseal")
 			}
 		}
 
