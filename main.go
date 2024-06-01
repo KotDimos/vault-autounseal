@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"io/ioutil"
 	"log"
 	"os"
 	"time"
@@ -38,7 +37,7 @@ func checkVaultReady(client *vault.Client) bool {
 func getVaultSealStatus(client *vault.Client) bool {
 	status, err := client.Sys().SealStatus()
 	if err != nil {
-		l.Fatalf("checking seal status: %w", err)
+		l.Fatalf("checking seal status: %v", err)
 	}
 
 	return status.Sealed
@@ -64,7 +63,7 @@ func main() {
 	var unsealConfig UnsealConfig
 	flag.Parse()
 
-	yamlFile, err := ioutil.ReadFile(*configPath)
+	yamlFile, err := os.ReadFile(*configPath)
 	if err != nil {
 		panic(err)
 	}
