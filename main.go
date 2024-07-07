@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	vault "github.com/hashicorp/vault/api"
+	vaultapi "github.com/hashicorp/vault/api"
 	"gopkg.in/yaml.v2"
 )
 
@@ -21,12 +21,12 @@ var (
 
 type UnsealConfig struct {
 	Nodes         []string      `yaml:"nodes"`
-	Tokens        []string      `yaml:"tokens"`
+	UnsealTokens  []string      `yaml:"unsealTokens"`
 	CheckInterval time.Duration `yaml:"checkInterval"`
 	TlsSkipVerify bool          `yaml:"tlsSkipVerify"`
 }
 
-func checkVaultReady(client *vault.Client) bool {
+func checkVaultReady(client *vaultapi.Client) bool {
 	_, err := client.Sys().Health()
 	if err != nil {
 		return false
@@ -34,7 +34,7 @@ func checkVaultReady(client *vault.Client) bool {
 	return true
 }
 
-func getVaultSealStatus(client *vault.Client) bool {
+func getVaultSealStatus(client *vaultapi.Client) bool {
 	status, err := client.Sys().SealStatus()
 	if err != nil {
 		l.Fatalf("checking seal status: %v", err)
@@ -43,16 +43,16 @@ func getVaultSealStatus(client *vault.Client) bool {
 	return status.Sealed
 }
 
-func newVaultClient(addr string, tlsSkipVerify bool) (vaultClient *vault.Client) {
+func newVaultClient(addr string, tlsSkipVerify bool) (vaultClient *vaultapi.Client) {
 	var err error
-	vaultConfig := vault.DefaultConfig()
+	vaultConfig := vaultapi.DefaultConfig()
 	vaultConfig.Address = addr
 
-	if err = vaultConfig.ConfigureTLS(&vault.TLSConfig{Insecure: tlsSkipVerify}); err != nil {
+	if err = vaultConfig.ConfigureTLS(&vaultapi.TLSConfig{Insecure: tlsSkipVerify}); err != nil {
 		l.Fatalf("error initializing tls config")
 	}
 
-	if vaultClient, err = vault.NewClient(vaultConfig); err != nil {
+	if vaultClient, err = vaultapi.NewClient(vaultConfig); err != nil {
 		l.Fatalf("error creating vault client: %v", err)
 	}
 
@@ -83,7 +83,7 @@ func main() {
 
 			if getVaultSealStatus(client) {
 				l.Println("Vault is seal, start unseal")
-				for _, token := range unsealConfig.Tokens {
+				for _, token := range unsealConfig.UnsealTokens {
 					client.Sys().Unseal(token)
 				}
 			} else {
