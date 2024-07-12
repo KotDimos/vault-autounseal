@@ -28,10 +28,7 @@ type UnsealConfig struct {
 
 func checkVaultReady(client *vaultapi.Client) bool {
 	_, err := client.Sys().Health()
-	if err != nil {
-		return false
-	}
-	return true
+	return err == nil
 }
 
 func getVaultSealStatus(client *vaultapi.Client) bool {
