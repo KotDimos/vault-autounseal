@@ -46,11 +46,11 @@ func newVaultClient(addr string, tlsSkipVerify bool) (vaultClient *vaultapi.Clie
 	vaultConfig.Address = addr
 
 	if err = vaultConfig.ConfigureTLS(&vaultapi.TLSConfig{Insecure: tlsSkipVerify}); err != nil {
-		l.Fatalf("error initializing tls config")
+		l.Fatalf("Error initializing tls config")
 	}
 
 	if vaultClient, err = vaultapi.NewClient(vaultConfig); err != nil {
-		l.Fatalf("error creating vault client: %v", err)
+		l.Fatalf("Error creating vault client: %v", err)
 	}
 
 	return vaultClient
@@ -81,7 +81,10 @@ func main() {
 			if getVaultSealStatus(client) {
 				l.Println("Vault is seal, start unseal")
 				for _, token := range unsealConfig.UnsealTokens {
-					client.Sys().Unseal(token)
+					_, err := client.Sys().Unseal(token)
+					if err != nil {
+						l.Fatalf("Error unseal vault: %v", err)
+					}
 				}
 			} else {
 				l.Println("Vault is unseal")
