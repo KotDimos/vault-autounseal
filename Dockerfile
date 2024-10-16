@@ -13,5 +13,5 @@ FROM gcr.io/distroless/base-debian12:nonroot
 
 COPY --from=build /build/bin/vault-autounseal /vault-autounseal
 
-USER 10001
+USER 1001
 ENTRYPOINT ["/vault-autounseal"]
