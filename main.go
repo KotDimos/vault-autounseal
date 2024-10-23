@@ -95,7 +95,7 @@ func main() {
 						l.Fatalf("Error unseal vault - %v", err)
 					}
 				}
-			} else {
+			} else if unsealConfig.PrintUnsealLogs {
 				l.Println("Vault is unseal")
 			}
 		}
