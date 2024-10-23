@@ -20,10 +20,11 @@ var (
 )
 
 type UnsealConfig struct {
-	Nodes         []string      `yaml:"nodes"`
-	UnsealTokens  []string      `yaml:"unsealTokens"`
-	CheckInterval time.Duration `yaml:"checkInterval"`
-	TlsSkipVerify bool          `yaml:"tlsSkipVerify"`
+	Nodes           []string      `yaml:"nodes"`
+	UnsealTokens    []string      `yaml:"unsealTokens"`
+	CheckInterval   time.Duration `default:"15" yaml:"checkInterval"`
+	TlsSkipVerify   bool          `default:"true" yaml:"tlsSkipVerify"`
+	PrintUnsealLogs bool          `default:"false" yaml:"printUnsealLogs"`
 }
 
 func checkVaultReady(client *vaultapi.Client) bool {
@@ -60,12 +61,20 @@ func main() {
 	var unsealConfig UnsealConfig
 	flag.Parse()
 
-	yamlFile, err := os.ReadFile(*configPath)
+	yamlConig, err := os.ReadFile(*configPath)
 	if err != nil {
 		panic(err)
 	}
 
-	if err := yaml.Unmarshal(yamlFile, &unsealConfig); err != nil {
+	if err := yaml.Unmarshal(yamlConig, &unsealConfig); err != nil {
+		panic(err)
+	}
+
+	if len(unsealConfig.UnsealTokens) == 0 {
+		panic(err)
+	}
+
+	if len(unsealConfig.Nodes) == 0 {
 		panic(err)
 	}
 
