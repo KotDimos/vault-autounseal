@@ -3,3 +3,4 @@ Dockerfile
 .gitignore
 dev/
 example.vault-unseal.yaml
+README.md
