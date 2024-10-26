@@ -1,7 +1,7 @@
 ---
 checkInterval: 15
-
 tlsSkipVerify: false
+printUnsealLogs: true
 
 nodes:
   - https://1.2.3.4:8200

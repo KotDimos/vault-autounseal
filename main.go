@@ -22,9 +22,9 @@ var (
 type UnsealConfig struct {
 	Nodes           []string      `yaml:"nodes"`
 	UnsealTokens    []string      `yaml:"unsealTokens"`
-	CheckInterval   time.Duration `default:"15" yaml:"checkInterval"`
-	TlsSkipVerify   bool          `default:"true" yaml:"tlsSkipVerify"`
-	PrintUnsealLogs bool          `default:"false" yaml:"printUnsealLogs"`
+	CheckInterval   time.Duration `yaml:"checkInterval"`
+	TlsSkipVerify   bool          `yaml:"tlsSkipVerify"`
+	PrintUnsealLogs bool          `yaml:"printUnsealLogs"`
 }
 
 func checkVaultReady(client *vaultapi.Client) bool {
@@ -96,7 +96,7 @@ func main() {
 					}
 				}
 			} else if unsealConfig.PrintUnsealLogs {
-				l.Println("Vault is unseal")
+				l.Printf("Node '%s' is unseal\n", node)
 			}
 		}
 
