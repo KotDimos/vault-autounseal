@@ -1,4 +1,4 @@
-FROM golang:1.22 AS build
+FROM golang:1.22 AS builder
 
 WORKDIR /build
 
@@ -11,7 +11,7 @@ RUN go build -o bin/vault-autounseal
 
 FROM gcr.io/distroless/base-debian12:nonroot
 
-COPY --from=build /build/bin/vault-autounseal /vault-autounseal
+COPY --from=builder /build/bin/vault-autounseal /vault-autounseal
 
 USER 10001
 ENTRYPOINT ["/vault-autounseal"]
