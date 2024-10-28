@@ -7,7 +7,7 @@ import (
 	"time"
 
 	vaultapi "github.com/hashicorp/vault/api"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 // CLI arguments
@@ -20,11 +20,11 @@ var (
 )
 
 type UnsealConfig struct {
-	Nodes           []string      `yaml:"nodes"`
-	UnsealTokens    []string      `yaml:"unsealTokens"`
-	CheckInterval   time.Duration `yaml:"checkInterval"`
-	TlsSkipVerify   bool          `yaml:"tlsSkipVerify"`
-	PrintUnsealLogs bool          `yaml:"printUnsealLogs"`
+	Nodes           []string `yaml:"nodes"`
+	UnsealTokens    []string `yaml:"unsealTokens"`
+	CheckInterval   int      `yaml:"checkInterval"`
+	TlsSkipVerify   bool     `yaml:"tlsSkipVerify"`
+	PrintUnsealLogs bool     `yaml:"printUnsealLogs"`
 }
 
 func checkVaultReady(client *vaultapi.Client) bool {
@@ -66,7 +66,8 @@ func main() {
 		panic(err)
 	}
 
-	if err := yaml.Unmarshal(yamlConig, &unsealConfig); err != nil {
+	err = yaml.Unmarshal(yamlConig, &unsealConfig)
+	if err != nil {
 		panic(err)
 	}
 
@@ -100,6 +101,6 @@ func main() {
 			}
 		}
 
-		time.Sleep(unsealConfig.CheckInterval * time.Second)
+		time.Sleep(time.Duration(unsealConfig.CheckInterval) * time.Second)
 	}
 }
