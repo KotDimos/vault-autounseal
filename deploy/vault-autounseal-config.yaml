@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: vault-autounseal-config
+stringData:
+  vault-autounseal.yaml: |-
+    ---
+    checkInterval: 15
+    tlsSkipVerify: true
+    printUnsealLogs: false
+
+    nodes:
+      - http://vault-0.vault-internal:8200
+      - http://vault-1.vault-internal:8200
+      - http://vault-2.vault-internal:8200
+
+    unsealTokens:
+      - token1
+      - token2
+      - token3
+      - token4
+      - token5

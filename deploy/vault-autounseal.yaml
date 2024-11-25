@@ -1,0 +1,34 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vault-autounseal
+spec:
+  selector:
+    matchLabels:
+      app: vault-autounseal
+  template:
+    metadata:
+      labels:
+        app: vault-autounseal
+    spec:
+      containers:
+        - name: vault-autounseal
+          image: kotdimos/vault-autounseal:latest
+          args:
+            - --config
+            - /etc/vault-autounseal/vault-autounseal.yaml
+          resources:
+            requests:
+              memory: "10Mi"
+              cpu: "10m"
+            limits:
+              memory: "100Mi"
+              cpu: "100m"
+          volumeMounts:
+            - name: vault-autounseal-config
+              mountPath: /etc/vault-autounseal
+      volumes:
+        - name: vault-autounseal-config
+          secret:
+            secretName: vault-autounseal-config
