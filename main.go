@@ -72,11 +72,13 @@ func main() {
 	}
 
 	if len(unsealConfig.UnsealTokens) == 0 {
-		panic(err)
+		l.Fatalf("Error tokens not founds")
+		os.Exit(1)
 	}
 
 	if len(unsealConfig.Nodes) == 0 {
-		panic(err)
+		l.Fatalf("Error nodes not founds")
+		os.Exit(1)
 	}
 
 	for {
