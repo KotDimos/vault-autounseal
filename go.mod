@@ -1,6 +1,6 @@
 module github.com/kotdimos/vault-autounseal
 
-go 1.22
+go 1.23
 
 require (
 	github.com/hashicorp/vault/api v1.12.2
