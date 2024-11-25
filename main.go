@@ -91,7 +91,7 @@ func main() {
 			}
 
 			if getVaultSealStatus(client) {
-				l.Println("Vault is seal, start unseal")
+				l.Printf("Vault '%s' is seal, start unseal\n", node)
 				for _, token := range unsealConfig.UnsealTokens {
 					_, err := client.Sys().Unseal(token)
 					if err != nil {
