@@ -2,5 +2,5 @@ Dockerfile
 .git/
 .gitignore
 dev/
-example.vault-unseal.yaml
+deploy/
 README.md
