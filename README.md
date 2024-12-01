@@ -35,7 +35,7 @@ Using your vault or creating vault using [helm](https://developer.hashicorp.com/
 ```bash
 helm repo add hashicorp https://helm.releases.hashicorp.com
 helm repo update
-helm upgrade --install -n vault --create-namespace vault hashicorp/vault \
+helm upgrade --install vault hashicorp/vault --create-namespace -n vault \
     --set='server.ha.enabled=true' \
     --set='server.ha.raft.enabled=true'
 ```
@@ -43,15 +43,15 @@ helm upgrade --install -n vault --create-namespace vault hashicorp/vault \
 If helm hashicorp repo unavailable, cloning this [repo](https://github.com/hashicorp/vault-helm) and start:
 ```bash
 git clone git@github.com:hashicorp/vault-helm.git
-helm upgrade --install -n vault --create-namespace vault vault-helm \
+helm upgrade --install vault vault-helm --create-namespace -n vault \
     --set='server.ha.enabled=true' \
     --set='server.ha.raft.enabled=true'
 ```
 
 Initialize vault:
 ```bash
-kubectl -n vault exec -ti vault-0 -- vault operator init
-kubectl -n vault exec -ti vault-0 -- vault operator unseal
+kubectl -n vault exec -it vault-0 -- vault operator init
+kubectl -n vault exec -it vault-0 -- vault operator unseal
 kubectl -n vault exec -it vault-1 -- vault operator raft join http://vault-0.vault-internal:8200
 kubectl -n vault exec -it vault-2 -- vault operator raft join http://vault-0.vault-internal:8200
 ```
