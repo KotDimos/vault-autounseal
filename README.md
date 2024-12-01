@@ -38,8 +38,20 @@ helm repo update
 helm upgrade --install -n vault --create-namespace vault hashicorp/vault \
     --set='server.ha.enabled=true' \
     --set='server.ha.raft.enabled=true'
-kubectl exec -ti vault-0 -- vault operator init
-kubectl exec -ti vault-0 -- vault operator unseal
+```
+
+If helm hashicorp repo unavailable, cloning this [repo](https://github.com/hashicorp/vault-helm) and start:
+```bash
+git clone git@github.com:hashicorp/vault-helm.git
+helm upgrade --install -n vault --create-namespace vault vault-helm \
+    --set='server.ha.enabled=true' \
+    --set='server.ha.raft.enabled=true'
+```
+
+Initialize vault:
+```bash
+kubectl -n vault exec -ti vault-0 -- vault operator init
+kubectl -n vault exec -ti vault-0 -- vault operator unseal
 kubectl -n vault exec -it vault-1 -- vault operator raft join http://vault-0.vault-internal:8200
 kubectl -n vault exec -it vault-2 -- vault operator raft join http://vault-0.vault-internal:8200
 ```
