@@ -35,7 +35,7 @@ func checkVaultReady(client *vaultapi.Client) bool {
 func getVaultSealStatus(client *vaultapi.Client) bool {
 	status, err := client.Sys().SealStatus()
 	if err != nil {
-		l.Fatalf("checking seal status: %v", err)
+		l.Fatalf("Error checking seal status: %v", err)
 	}
 
 	return status.Sealed
@@ -86,12 +86,12 @@ func main() {
 			client := newVaultClient(node, unsealConfig.TlsSkipVerify)
 
 			if !checkVaultReady(client) {
-				l.Printf("Node %s is not ready\n", node)
+				l.Printf("Node ''%s' is not ready\n", node)
 				continue
 			}
 
 			if getVaultSealStatus(client) {
-				l.Printf("Vault '%s' is seal, start unseal\n", node)
+				l.Printf("Node '%s' is seal, start unseal\n", node)
 				for _, token := range unsealConfig.UnsealTokens {
 					_, err := client.Sys().Unseal(token)
 					if err != nil {
