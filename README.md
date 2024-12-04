@@ -25,7 +25,7 @@ unsealTokens:
 
 * `checkInterval` - the node verification interval in seconds.
 * `tlsSkipVerify` - certificate verification is required when connecting.
-* `printUnsealLogs` - print logs that the nodes have been printed.
+* `printUnsealLogs` - if true, print logs that nodes are unsealed.
 * `nodes` - a list of nodes that need to be checked for unseal.
 * `unsealTokens` - a list of unseal tokens.
 
@@ -40,7 +40,7 @@ helm upgrade --install vault hashicorp/vault --create-namespace -n vault \
     --set='server.ha.raft.enabled=true'
 ```
 
-If helm hashicorp repo unavailable, cloning this [repo](https://github.com/hashicorp/vault-helm) and start:
+If helm hashicorp repo unavailable, cloning this [repo](https://github.com/hashicorp/vault-helm) and deploy vault:
 ```bash
 git clone git@github.com:hashicorp/vault-helm.git
 helm upgrade --install vault vault-helm --create-namespace -n vault \
