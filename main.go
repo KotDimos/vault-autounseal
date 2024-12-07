@@ -86,7 +86,7 @@ func main() {
 			client := newVaultClient(node, unsealConfig.TlsSkipVerify)
 
 			if !checkVaultReady(client) {
-				l.Printf("Node ''%s' is not ready\n", node)
+				l.Printf("Node '%s' is not ready\n", node)
 				continue
 			}
 
