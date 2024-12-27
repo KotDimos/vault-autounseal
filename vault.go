@@ -21,17 +21,16 @@ func getVaultSealStatus(client *vaultapi.Client) bool {
 	return status.Sealed
 }
 
-func newVaultClient(addr string, tlsSkipVerify bool) (vaultClient *vaultapi.Client) {
-	var err error
-
+func newVaultClient(addr string, tlsSkipVerify bool) *vaultapi.Client {
 	vaultConfig := vaultapi.DefaultConfig()
 	vaultConfig.Address = addr
 
-	if err = vaultConfig.ConfigureTLS(&vaultapi.TLSConfig{Insecure: tlsSkipVerify}); err != nil {
+	if err := vaultConfig.ConfigureTLS(&vaultapi.TLSConfig{Insecure: tlsSkipVerify}); err != nil {
 		log.Fatalf("Error initializing tls config - %v", err)
 	}
 
-	if vaultClient, err = vaultapi.NewClient(vaultConfig); err != nil {
+	vaultClient, err := vaultapi.NewClient(vaultConfig)
+	if err != nil {
 		log.Fatalf("Error creating vault client - %v", err)
 	}
 
