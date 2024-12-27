@@ -17,7 +17,7 @@ type UnsealConfig struct {
 	PrintUnsealLogs bool     `yaml:"printUnsealLogs"`
 }
 
-func main() {
+func parseUnsealConfig() UnsealConfig {
 	var unsealConfig UnsealConfig
 
 	configPath := flag.String("config", "./vault-unseal.yaml", "The path to the configuration file")
@@ -33,12 +33,18 @@ func main() {
 	}
 
 	if len(unsealConfig.UnsealTokens) == 0 {
-		log.Fatalf("Error tokens not founds")
+		log.Fatalf("Error tokens not founds in %s", *configPath)
 	}
 
 	if len(unsealConfig.Nodes) == 0 {
-		log.Fatalf("Error nodes not founds")
+		log.Fatalf("Error nodes not founds in %s", *configPath)
 	}
+
+	return unsealConfig
+}
+
+func main() {
+	unsealConfig := parseUnsealConfig()
 
 	for {
 		for _, node := range unsealConfig.Nodes {
