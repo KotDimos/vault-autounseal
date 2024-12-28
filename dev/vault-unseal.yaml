@@ -1,0 +1,10 @@
+---
+checkInterval: 15
+tlsSkipVerify: true
+printUnsealLogs: true
+
+nodes:
+  - http://localhost:8200
+
+unsealTokens:
+  - UNSEAL_TOKEN
