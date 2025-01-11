@@ -3,6 +3,7 @@ module github.com/kotdimos/vault-autounseal
 go 1.23
 
 require (
+	github.com/creasty/defaults v1.8.0
 	github.com/hashicorp/vault/api v1.15.0
 	gopkg.in/yaml.v3 v3.0.1
 )

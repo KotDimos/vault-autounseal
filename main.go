@@ -6,19 +6,23 @@ import (
 	"os"
 	"time"
 
+	"github.com/creasty/defaults"
 	"gopkg.in/yaml.v3"
 )
 
 type UnsealConfig struct {
 	Nodes           []string `yaml:"nodes"`
 	UnsealTokens    []string `yaml:"unsealTokens"`
-	CheckInterval   int      `yaml:"checkInterval"`
-	TLSSkipVerify   bool     `yaml:"tlsSkipVerify"`
-	PrintUnsealLogs bool     `yaml:"printUnsealLogs"`
+	CheckInterval   int      `default:"15"        yaml:"checkInterval,omitempty"`
+	TLSSkipVerify   bool     `default:"true"      yaml:"tlsSkipVerify,omitempty"`
+	PrintUnsealLogs bool     `default:"false"     yaml:"printUnsealLogs,omitempty"`
 }
 
 func parseUnsealConfig() UnsealConfig {
-	var unsealConfig UnsealConfig
+	unsealConfig := &UnsealConfig{}
+	if err := defaults.Set(unsealConfig); err != nil {
+		panic(err)
+	}
 
 	configPath := flag.String("config", "./vault-unseal.yaml", "The path to the configuration file")
 	flag.Parse()
@@ -40,7 +44,7 @@ func parseUnsealConfig() UnsealConfig {
 		log.Fatalf("Error nodes not founds in %s", *configPath)
 	}
 
-	return unsealConfig
+	return *unsealConfig
 }
 
 func main() {
