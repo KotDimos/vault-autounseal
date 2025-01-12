@@ -23,9 +23,9 @@ unsealTokens:
   - token5
 ```
 
-* `checkInterval` - the node verification interval in seconds.
-* `tlsSkipVerify` - certificate verification is required when connecting.
-* `printUnsealLogs` - if true, print logs that nodes are unsealed.
+* `checkInterval` - the node verification interval in seconds (default vaule - 15).
+* `tlsSkipVerify` - certificate verification is required when connecting (default vaule - true).
+* `printUnsealLogs` - if true, print logs that nodes are unsealed (default vaule - false).
 * `nodes` - a list of nodes that need to be checked for unseal.
 * `unsealTokens` - a list of unseal tokens.
 
