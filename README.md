@@ -31,7 +31,11 @@ unsealTokens:
 
 ## Deploy Vault-Autounseal
 
-Using your vault or creating vault using [helm](https://developer.hashicorp.com/vault/docs/platform/k8s/helm/examples/ha-with-raft):
+If you are using your vault, you are skipping this step.
+
+Here is an example of deploying vault on integrated storage, if you want to use another option, look [here](https://developer.hashicorp.com/vault/docs/configuration/storage).
+
+Creating vault using [helm](https://developer.hashicorp.com/vault/docs/platform/k8s/helm/examples/ha-with-raft).
 ```bash
 helm repo add hashicorp https://helm.releases.hashicorp.com
 helm repo update
@@ -40,7 +44,7 @@ helm upgrade --install vault hashicorp/vault --create-namespace -n vault \
     --set='server.ha.raft.enabled=true'
 ```
 
-If helm hashicorp repo unavailable, cloning this [repo](https://github.com/hashicorp/vault-helm) and deploy vault:
+If helm hashicorp repo unavailable, cloning this [repo](https://github.com/hashicorp/vault-helm) and deploying vault:
 ```bash
 git clone git@github.com:hashicorp/vault-helm.git
 helm upgrade --install vault vault-helm --create-namespace -n vault \
@@ -51,10 +55,17 @@ helm upgrade --install vault vault-helm --create-namespace -n vault \
 Initialize vault:
 ```bash
 kubectl -n vault exec -it vault-0 -- vault operator init
+```
 
-# run the command 3 times for unseal vault
+Unseal vault instance:
+```bash
 kubectl -n vault exec -it vault-0 -- vault operator unseal
+kubectl -n vault exec -it vault-0 -- vault operator unseal
+kubectl -n vault exec -it vault-0 -- vault operator unseal
+```
 
+Join
+```bash
 kubectl -n vault exec -it vault-1 -- vault operator raft join http://vault-0.vault-internal:8200
 kubectl -n vault exec -it vault-2 -- vault operator raft join http://vault-0.vault-internal:8200
 ```
