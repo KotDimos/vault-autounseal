@@ -35,7 +35,7 @@ If you are using your vault, you are skipping this step.
 
 Here is an example of deploying vault on integrated storage, if you want to use another option, look [here](https://developer.hashicorp.com/vault/docs/configuration/storage).
 
-Creating vault using [helm](https://developer.hashicorp.com/vault/docs/platform/k8s/helm/examples/ha-with-raft).
+Creating vault using [helm](https://developer.hashicorp.com/vault/docs/platform/k8s/helm/examples/ha-with-raft):
 ```bash
 helm repo add hashicorp https://helm.releases.hashicorp.com
 helm repo update
@@ -64,7 +64,7 @@ kubectl -n vault exec -it vault-0 -- vault operator unseal
 kubectl -n vault exec -it vault-0 -- vault operator unseal
 ```
 
-Join
+Join:
 ```bash
 kubectl -n vault exec -it vault-1 -- vault operator raft join http://vault-0.vault-internal:8200
 kubectl -n vault exec -it vault-2 -- vault operator raft join http://vault-0.vault-internal:8200
