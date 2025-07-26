@@ -72,10 +72,10 @@ kubectl -n vault exec -it vault-2 -- vault operator raft join http://vault-0.vau
 
 Change unseal tokens in config:
 ```bash
-vim deploy/vault-autounseal-config.yaml
+vim manifests/vault-autounseal-config.yaml
 ```
 
 Apply vault-autounseal:
 ```bash
-kubectl -n vault apply -f deploy
+kubectl -n vault apply -f manifests
 ```
